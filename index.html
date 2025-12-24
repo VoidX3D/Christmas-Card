@@ -49,7 +49,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 2;
+            z-index: 2; /* Behind glass */
             pointer-events: none;
         }
 
@@ -61,8 +61,8 @@
             height: 100%;
             backdrop-filter: blur(10px) saturate(var(--glass-saturate));
             -webkit-backdrop-filter: blur(10px) saturate(var(--glass-saturate));
-            background: linear-gradient(45deg, rgba(255,255,255,0.005) 0%, rgba(255,255,255,0.001) 100%);
-            z-index: 3; 
+            background: none; /* Fully transparent */
+            z-index: 3; /* Above snow */
             pointer-events: none;
         }
 
@@ -73,7 +73,7 @@
             height: 60vmin;
             max-height: 350px;
             perspective: 1200px;
-            z-index: 100;
+            z-index: 100; /* Above all other layers */
         }
 
         .envelope-wrapper {
@@ -201,6 +201,83 @@
             color: var(--color-accent);
         }
 
+        .decoration {
+            position: absolute;
+            z-index: 5;
+            pointer-events: none;
+            opacity: 0.8;
+            bottom: 0; /* Position at the bottom */
+        }
+
+        .decoration svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .twinkle {
+            animation: twinkle 2s infinite;
+        }
+
+        #reindeer-sleigh {
+            transform: translateY(-50px);
+        }
+
+
+        .garland {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 200;
+            pointer-events: none;
+        }
+
+        .lights {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 201;
+        }
+        
+        .light {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px currentColor;
+        }
+
+        .envelope-message {
+            color: var(--color-text-light);
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            text-align: left;
+            line-height: 1.5;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .envelope-message .to-text {
+            font-weight: 700;
+            font-size: 1.4rem;
+        }
+
+        .envelope-message .from-text {
+            font-style: italic;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+        }
+
     </style>
 </head>
 <body>
@@ -210,6 +287,52 @@
     </div>
     <div class="glass-layer"></div>
     <canvas id="snow-canvas"></canvas>
+
+    <!-- New Decorations -->
+    <svg class="garland" viewBox="0 0 1000 100">
+        <path d="M0,50 C100,0 200,100 300,50 S500,0 600,50 S800,100 900,50 S1100,0 1200,50" fill="none" stroke="#1E8449" stroke-width="5"/>
+    </svg>
+    <div class="lights">
+        <div class="light" style="background-color: #f1c40f; top: 5%; left: 10%;"></div>
+        <div class="light" style="background-color: #e74c3c; top: 10%; left: 25%;"></div>
+        <div class="light" style="background-color: #3498db; top: 8%; left: 45%;"></div>
+        <div class="light" style="background-color: #9b59b6; top: 6%; left: 65%;"></div>
+        <div class="light" style="background-color: #2ecc71; top: 9%; left: 85%;"></div>
+    </div>
+
+
+    <!-- Decorations -->
+    <div class="decoration" id="reindeer-sleigh" style="width: 200px; top: 5%; left: -200px;">
+        <svg viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M150 70 Q140 60 130 70" stroke="#8B4513" stroke-width="3" fill="none"/>
+            <path d="M130 70 L120 80 L110 70" stroke="#8B4513" stroke-width="3" fill="none"/>
+            <path d="M120 80 L120 90" stroke="#8B4513" stroke-width="3" fill="none"/>
+            <path d="M115 90 L125 90" stroke="#8B4513" stroke-width="3" fill="none"/>
+            <path d="M50 80 H100 V95 H50 Z" fill="#c0392b"/>
+            <path d="M45 80 L50 80" stroke="black" stroke-width="2"/>
+            <path d="M45 95 L50 95" stroke="black" stroke-width="2"/>
+        </svg>
+    </div>
+    <div class="decoration" id="gifts" style="width: 120px; bottom: 5%; left: 5%;">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="50" width="40" height="40" fill="#27ae60"/>
+            <rect x="5" y="65" width="50" height="10" fill="#f1c40f"/>
+            <rect x="25" y="50" width="10" height="40" fill="#f1c40f"/>
+            <rect x="60" y="60" width="30" height="30" fill="#c0392b"/>
+            <rect x="55" y="70" width="40" height="10" fill="#f1c40f"/>
+            <rect x="70" y="60" width="10" height="30" fill="#f1c40f"/>
+        </svg>
+    </div>
+    <div class="decoration" id="tree" style="width: 130px; bottom: 5%; right: 5%;">
+        <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,0 20,40 40,40 10,80 30,80 0,120 100,120 70,80 90,80 60,40 80,40" fill="#1E8449"/>
+            <circle cx="50" cy="10" r="5" fill="#f1c40f"/>
+            <circle cx="40" cy="50" r="4" fill="#c0392b" class="twinkle"/>
+            <circle cx="60" cy="50" r="4" fill="#e74c3c" class="twinkle"/>
+            <circle cx="30" cy="90" r="3" fill="#3498db" class="twinkle"/>
+            <circle cx="70" cy="90" r="3" fill="#9b59b6" class="twinkle"/>
+        </svg>
+    </div>
 
     <div class="card-container">
         <div class="envelope-wrapper">
@@ -225,7 +348,12 @@
                     </p>
                     <p class="signature">— Sincere Bhattarai</p>
                 </div>
-                <div class="envelope-flap"></div>
+                <div class="envelope-flap">
+                    <div class="envelope-message">
+                        To: Marije Schte<br><br>
+                        From: Sincere Bhattarai
+                    </div>
+                </div>
             </div>
             <div class="ribbon-wrapper">
                 <div class="ribbon vertical"></div>
@@ -299,6 +427,7 @@
             const ribbonWrapper = document.querySelector('.ribbon-wrapper');
             const envelopeFlap = document.querySelector('.envelope-flap');
             const letter = document.querySelector('.letter');
+            const decorations = document.querySelectorAll('.decoration');
             
             let opened = false;
             
@@ -312,6 +441,41 @@
                 duration: 2000,
                 easing: 'easeOutExpo',
                 delay: 500,
+            });
+
+            // Decoration animation
+            anime({
+                targets: '.decoration:not(#reindeer-sleigh)',
+                translateY: (el, i) => i % 2 === 0 ? '-15px' : '15px',
+                translateX: (el, i) => i % 2 === 0 ? '10px' : '-10px',
+                scale: [1, 1.05, 1],
+                loop: true,
+                direction: 'alternate',
+                easing: 'easeInOutSine',
+                duration: 4000,
+                delay: anime.random(0, 1000),
+            });
+
+            // Twinkling lights animation
+            anime({
+                targets: '.light',
+                opacity: [0, 1],
+                duration: 1000,
+                direction: 'alternate',
+                loop: true,
+                easing: 'easeInOutSine',
+                delay: anime.random(0, 1000),
+            });
+
+
+            // Flying reindeer animation
+            anime({
+                targets: '#reindeer-sleigh',
+                translateX: '110vw',
+                duration: 20000,
+                easing: 'linear',
+                loop: true,
+                delay: 2000,
             });
 
             const openCard = () => {
