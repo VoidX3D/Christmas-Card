@@ -151,14 +151,11 @@
 <body>
 
     <div class="background-iframe-container">
-        <!-- Current: -->
-<iframe id="background-iframe" src="./assets/background.html"></iframe>
-
-<!-- Try: -->
-<iframe id="background-iframe" src="assets/background.html"></iframe>
-<!-- Or: -->
-<iframe id="background-iframe" src="/assets/background.html"></iframe>
-        
+        <iframe id="background-iframe" 
+        src="./assets/background.html"
+        allow="autoplay; fullscreen"
+        sandbox="allow-same-origin allow-scripts">
+        </iframe>
         <iframe id="background-iframe" src="./assets/background.html"></iframe>
     </div>
     <div class="glass-layer"></div>
