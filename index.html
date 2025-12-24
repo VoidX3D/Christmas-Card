@@ -1,44 +1,32 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Merry Christmas!</title>
-    <link rel="stylesheet" href="src/style.css">
-    <link rel="icon" href="assets/favicon-32.png" type="image/png">
-</head>
-<body>
-    <div class="background"></div>
-    <canvas id="snow-canvas"></canvas>
-
-    <div class="card-container">
-        <div class="glass-card">
-            <div class="card-content">
-                <h1 class="title">Merry Christmas!</h1>
-                <p class="message">
-                    Hope your day went well!<br>
-                    Thinking of you all in the Netherlands.<br>
-                    Wishing you peace, health, and warm moments together.<br>
-                    May this season bring a little extra joy!<br>
-                    Miss you and can’t wait to see you again.
-                </p>
-                <p class="signature">— Sincere Bhattarai</p>
-            </div>
-        </div>
-
-        <div id="ribbon-and-stamp">
-            <div class="ribbon">
-                <div class="ribbon-knot"></div>
-            </div>
-            <div class="stamp">
-                <img src="public/assets/images/family-photo.jpg" alt="Family Photo">
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <script src="src/snow.js"></script>
-    <script src="src/animations.js"></script>
-    <script src="src/main.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Christmas Card 2025</title>
+    <style>
+      body, html { margin: 0; padding: 0; overflow: hidden; background-color: #0a1332; }
+      #background-iframe {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        border: none;
+        z-index: 0; /* Background layer */
+      }
+      #root {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1; /* React app sits on top */
+      }
+    </style>
+  </head>
+  <body>
+    <iframe id="background-iframe" src="/assets/background.html" title="Christmas Background Scene"></iframe>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
