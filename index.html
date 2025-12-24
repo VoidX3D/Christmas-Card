@@ -28,15 +28,19 @@
             background-color: #0a1332; /* Fallback background */
         }
 
-        .background-image {
+        .background-iframe-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('https://i.imgur.com/8pB0S4j.jpg') no-repeat center center/cover; /* Placeholder family photo */
-            filter: brightness(0.7);
-            z-index: -3;
+            z-index: 1;
+        }
+
+        #background-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         #snow-canvas {
@@ -45,7 +49,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -2;
+            z-index: 2;
             pointer-events: none;
         }
 
@@ -55,10 +59,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-            background: linear-gradient(45deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-            z-index: 1; /* Above background and snow, below card */
+            backdrop-filter: blur(10px) saturate(var(--glass-saturate));
+            -webkit-backdrop-filter: blur(10px) saturate(var(--glass-saturate));
+            background: linear-gradient(45deg, rgba(255,255,255,0.005) 0%, rgba(255,255,255,0.001) 100%);
+            z-index: 3; 
             pointer-events: none;
         }
 
@@ -201,7 +205,9 @@
 </head>
 <body>
 
-    <div class="background-image"></div>
+    <div class="background-iframe-container">
+        <iframe id="background-iframe" src="assets/background.html"></iframe>
+    </div>
     <div class="glass-layer"></div>
     <canvas id="snow-canvas"></canvas>
 
