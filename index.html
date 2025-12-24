@@ -1,32 +1,344 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Christmas Card 2025</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Christmas Card for You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <style>
-      body, html { margin: 0; padding: 0; overflow: hidden; background-color: #0a1332; }
-      #background-iframe {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        border: none;
-        z-index: 0; /* Background layer */
-      }
-      #root {
-        position: relative;
-        width: 100vw;
-        height: 100vh;
-        z-index: 1; /* React app sits on top */
-      }
+        :root {
+            --color-primary: #c0392b; /* Christmas Red */
+            --color-secondary: #27ae60; /* Christmas Green */
+            --color-accent: #f1c40f; /* Gold */
+            --color-text-light: #ecf0f1;
+            --color-text-dark: #34495e;
+            --glass-blur: 20px;
+            --glass-saturate: 150%;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #0a1332; /* Fallback background */
+        }
+
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://i.imgur.com/8pB0S4j.jpg') no-repeat center center/cover; /* Placeholder family photo */
+            filter: brightness(0.7);
+            z-index: -3;
+        }
+
+        #snow-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .glass-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+            background: linear-gradient(45deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            z-index: 1; /* Above background and snow, below card */
+            pointer-events: none;
+        }
+
+        .card-container {
+            position: relative;
+            width: 90vmin;
+            max-width: 500px;
+            height: 60vmin;
+            max-height: 350px;
+            perspective: 1200px;
+            z-index: 100;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transform: rotateX(10deg) rotateY(-10deg);
+            transition: transform 1s ease;
+            cursor: pointer;
+            opacity: 0; /* Initially hidden */
+        }
+        
+        .envelope-wrapper:hover {
+            transform: rotateX(0deg) rotateY(0deg) scale(1.05);
+        }
+
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-primary);
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            transform-style: preserve-3d;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 52%;
+            background: linear-gradient(to bottom, #d64545, var(--color-primary));
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 25%, 0% 100%);
+            transform-origin: top center;
+            z-index: 12;
+        }
+
+        .letter {
+            position: absolute;
+            width: 95%;
+            height: 95%;
+            background-color: #f7f7f7;
+            border-radius: 5px;
+            top: 2.5%;
+            left: 2.5%;
+            transform: translateY(50%) translateZ(-100px);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            z-index: 5;
+            opacity: 0;
+            padding: 1.5rem;
+            box-sizing: border-box;
+            color: var(--color-text-dark);
+            text-align: center;
+        }
+
+        .letter h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: var(--color-primary);
+            margin: 0;
+        }
+
+        .letter p {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        .letter .signature {
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.9rem;
+            text-align: right;
+            margin-top: 1rem;
+        }
+
+        .ribbon-wrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 11;
+        }
+        
+        .ribbon {
+            position: absolute;
+            background: linear-gradient(90deg, var(--color-secondary) 33%, #fff 33%, #fff 66%, var(--color-primary) 66%);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .ribbon.vertical {
+            width: 30px;
+            height: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .ribbon.horizontal {
+            width: 100%;
+            height: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .stamp {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background-color: #fff;
+            border-radius: 50%;
+            top: 20%;
+            right: 15%;
+            transform: rotate(15deg);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+            border: 3px solid var(--color-accent);
+            z-index: 12;
+            pointer-events: auto; /* Clickable */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: var(--color-accent);
+        }
+
     </style>
-  </head>
-  <body>
-    <iframe id="background-iframe" src="/assets/background.html" title="Christmas Background Scene"></iframe>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+</head>
+<body>
+
+    <div class="background-image"></div>
+    <div class="glass-layer"></div>
+    <canvas id="snow-canvas"></canvas>
+
+    <div class="card-container">
+        <div class="envelope-wrapper">
+            <div class="envelope">
+                <div class="letter">
+                    <h1>Merry Christmas!</h1>
+                    <p>
+                        Hope your day went well!<br>
+                        Thinking of you all in the Netherlands.<br>
+                        Wishing you peace, health, and warm moments together.<br>
+                        May this season bring a little extra joy!<br>
+                        Miss you and can’t wait to see you again.
+                    </p>
+                    <p class="signature">— Sincere Bhattarai</p>
+                </div>
+                <div class="envelope-flap"></div>
+            </div>
+            <div class="ribbon-wrapper">
+                <div class="ribbon vertical"></div>
+                <div class="ribbon horizontal"></div>
+                <div class="stamp">❆</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const snowCanvas = document.getElementById('snow-canvas');
+            const snowCtx = snowCanvas.getContext('2d');
+            let snowflakes = [];
+            const numSnowflakes = 150;
+            const snowflakeShapes = ['\u2744', '\u2745', '\u2746'];
+
+            function resizeCanvas() {
+                snowCanvas.width = window.innerWidth;
+                snowCanvas.height = window.innerHeight;
+            }
+
+            function createSnowflakes() {
+                snowflakes = [];
+                for (let i = 0; i < numSnowflakes; i++) {
+                    snowflakes.push({
+                        x: Math.random() * snowCanvas.width,
+                        y: Math.random() * snowCanvas.height,
+                        size: Math.random() * 15 + 5,
+                        speed: Math.random() * 1 + 0.5,
+                        drift: Math.random() * 0.5 - 0.25,
+                        rotation: Math.random() * Math.PI * 2,
+                        rotationSpeed: (Math.random() - 0.5) * 0.01,
+                        shape: snowflakeShapes[Math.floor(Math.random() * snowflakeShapes.length)],
+                        opacity: Math.random() * 0.7 + 0.3
+                    });
+                }
+            }
+
+            function drawSnowflakes() {
+                snowCtx.clearRect(0, 0, snowCanvas.width, snowCanvas.height);
+                snowflakes.forEach(flake => {
+                    flake.y += flake.speed;
+                    flake.x += flake.drift;
+                    flake.rotation += flake.rotationSpeed;
+                    if (flake.y > snowCanvas.height) {
+                        flake.y = -flake.size;
+                        flake.x = Math.random() * snowCanvas.width;
+                    }
+                    snowCtx.save();
+                    snowCtx.globalAlpha = flake.opacity;
+                    snowCtx.fillStyle = 'white';
+                    snowCtx.font = `${flake.size}px Arial`;
+                    snowCtx.translate(flake.x, flake.y);
+                    snowCtx.rotate(flake.rotation);
+                    snowCtx.fillText(flake.shape, 0, 0);
+                    snowCtx.restore();
+                });
+                requestAnimationFrame(drawSnowflakes);
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            createSnowflakes();
+            drawSnowflakes();
+
+            // --- Animations ---
+            const envelopeWrapper = document.querySelector('.envelope-wrapper');
+            const stamp = document.querySelector('.stamp');
+            const ribbonWrapper = document.querySelector('.ribbon-wrapper');
+            const envelopeFlap = document.querySelector('.envelope-flap');
+            const letter = document.querySelector('.letter');
+            
+            let opened = false;
+            
+            // Initial reveal animation
+            anime({
+                targets: envelopeWrapper,
+                translateY: ['-100vh', '0%'],
+                opacity: [0, 1],
+                rotateX: '10deg',
+                rotateY: '-10deg',
+                duration: 2000,
+                easing: 'easeOutExpo',
+                delay: 500,
+            });
+
+            const openCard = () => {
+                if (opened) return;
+                opened = true;
+                
+                anime.timeline({
+                    easing: 'easeOutExpo',
+                })
+                .add({
+                    targets: [stamp, ribbonWrapper],
+                    translateY: '-200%',
+                    rotate: '45deg',
+                    opacity: 0,
+                    duration: 1200,
+                })
+                .add({
+                    targets: envelopeFlap,
+                    rotateX: '-180deg',
+                    duration: 1000,
+                    easing: 'easeInOutCubic',
+                }, '-=800')
+                .add({
+                    targets: letter,
+                    translateY: ['50%', '0%'],
+                    translateZ: ['-100px', '100px'],
+                    opacity: 1,
+                    duration: 1500,
+                }, '-=1000');
+            };
+            
+            envelopeWrapper.addEventListener('click', openCard);
+        });
+    </script>
+</body>
 </html>
