@@ -1,11 +1,12 @@
 import React, { Suspense, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, Html } from '@react-three/drei';
+import { OrbitControls, Environment, Html, Stars } from '@react-three/drei';
 import { Physics } from '@react-three/rapier';
 import Envelope from './components/Envelope';
 import Card from './components/Card';
 import Ribbon from './components/Ribbon';
 import Snowflakes from './components/Snowflakes';
+import Decorations from './components/Decorations';
 
 function App() {
   const [isOpened, setOpened] = useState(false);
@@ -14,36 +15,38 @@ function App() {
   const handleOpen = () => {
     if (!isOpened) {
       setRibbonFalling(true);
-      setTimeout(() => setOpened(true), 500); // Open envelope shortly after ribbon falls
+      setTimeout(() => setOpened(true), 200); // Open envelope shortly after ribbon falls
     }
   };
 
   return (
     <Canvas
       shadows
-      camera={{ position: [0, 0, 8], fov: 50 }}
+      camera={{ position: [0, 0, 10], fov: 50 }}
       style={{ background: 'transparent' }}
     >
-      <ambientLight intensity={0.7} />
+      <ambientLight intensity={1} />
       <spotLight
-        position={[10, 10, 10]}
-        angle={0.15}
+        position={[10, 20, 10]}
+        angle={0.3}
         penumbra={1}
-        intensity={1}
+        intensity={2}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
       />
       <Suspense fallback={<Html center>Loading...</Html>}>
-        <Physics gravity={[0, -20, 0]}>
+        <Physics gravity={[0, -30, 0]}>
           <Envelope isOpened={isOpened} />
           <Card isOpened={isOpened} />
-          <Ribbon isFalling={isRibbonFalling} onOpen={handleOpen} />
+          {!isOpened && <Ribbon isFalling={isRibbonFalling} onOpen={handleOpen} />}
           <Snowflakes />
+          <Decorations />
         </Physics>
-        <Environment preset="night" />
+        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade />
+        <Environment preset="city" />
       </Suspense>
-      <OrbitControls />
+      <OrbitControls autoRotate autoRotateSpeed={0.1} maxPolarAngle={Math.PI / 2} minPolarAngle={Math.PI / 3} />
     </Canvas>
   );
 }
